@@ -5,7 +5,7 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: 'http://localhost:3000' // ou a URL do seu front‑end
+    origin: ['http://localhost:3000' , 'https://chat-front-blond-ten.vercel.app/']// ou a URL do seu front‑end
   });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(8080);
