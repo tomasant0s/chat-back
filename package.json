@@ -5,9 +5,13 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=16.x",
+    "npm": ">=8.x"
+  },
   "scripts": {
     "build": "nest build && npm run copy-assets",
-    "copy-assets": "copyfiles -u 3 \"src/efipay/certs/**/*\" \"dist/efipay/certs\"",
+    "copy-assets": "copyfiles -u 3 src/efipay/certs/**/* dist/efipay/certs",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
