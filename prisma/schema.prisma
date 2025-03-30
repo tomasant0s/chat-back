@@ -1,0 +1,63 @@
+// schema.prisma
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  EXPIRED
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String
+  phone         String     @unique
+  email         String     @unique
+  monthlyBudget Float?     // Orçamento mensal definido pelo usuário (opcional)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relações
+  payment       Payment?   // Relação 1:1 (cada usuário realiza um único pagamento)
+  expenses      Expense[]
+  reminders     Reminder[]
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  user      User          @relation(fields: [userId], references: [id])
+  userId    String        @unique  // Garante que cada usuário tenha no máximo um pagamento
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  description String
+  value       Float
+  category    String?  // campo opcional para a categoria
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+
+model Reminder {
+  id          String   @id @default(uuid())
+  description String   // Descrição do lembrete
+  scheduledAt DateTime? // Data agendada para o lembrete (opcional)
+  recurrence  String?  // Tipo de recorrência: 'weekly', 'monthly', etc. (opcional)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+}
+
+
